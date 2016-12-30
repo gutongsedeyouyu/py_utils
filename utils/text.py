@@ -162,8 +162,8 @@ __PINYIN = (('A', -20319), ('Ai', -20317), ('An', -20304), ('Ang', -20295), ('Ao
             ('Zuo', -10254))
 
 
-def chinese_to_pinyin(s, acronym=False):
-    """Convert a Chinese string to pinyin.
+def gb2312_to_pinyin(s, acronym=False):
+    """Convert a Chinese GB2312 string to pinyin.
     """
     pinyin = list()
     for c in s:

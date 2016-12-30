@@ -77,17 +77,17 @@ class KeywordsCheckerTest(unittest.TestCase):
 
 
 class ChineseToPinyinTest(unittest.TestCase):
-    def test_chinese_to_pinyin_none(self):
+    def test_gb2312_to_pinyin_none(self):
         with self.assertRaises(TypeError):
-            utils.text.chinese_to_pinyin(None)
+            utils.text.gb2312_to_pinyin(None)
 
-    def test_chinese_to_pinyin_empty(self):
-        self.assertEqual(utils.text.chinese_to_pinyin(''), '')
+    def test_gb2312_to_pinyin_empty(self):
+        self.assertEqual(utils.text.gb2312_to_pinyin(''), '')
 
-    def test_chinese_to_pinyin(self):
-        self.assertEqual(utils.text.chinese_to_pinyin('Python是一种面向对象、解释型计算机程序设计语言。'),
+    def test_gb2312_to_pinyin(self):
+        self.assertEqual(utils.text.gb2312_to_pinyin('Python是一种面向对象、解释型计算机程序设计语言。'),
                          'PythonShiYiZhongMianXiangDuiXiangJieShiXingJiSuanJiChengXuSheJiYuYan')
-        self.assertEqual(utils.text.chinese_to_pinyin('天下武功出少林', acronym=True), 'TXWGCSL')
+        self.assertEqual(utils.text.gb2312_to_pinyin('天下武功出少林', acronym=True), 'TXWGCSL')
 
 
 class EditDistanceTest(unittest.TestCase):
