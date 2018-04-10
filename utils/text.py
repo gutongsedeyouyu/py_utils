@@ -77,7 +77,7 @@ class KeywordsChecker:
 
 
 #
-# Chinese to Pinyin
+# GB2312 to Pinyin
 #
 
 __PINYIN = (('A', -20319), ('Ai', -20317), ('An', -20304), ('Ang', -20295), ('Ao', -20292),
@@ -168,16 +168,20 @@ def gb2312_to_pinyin(s, acronym=False):
     pinyin = list()
     for c in s:
         # Encode a character.
-        bytes = c.encode('gb2312')
-        if len(bytes) == 2:
-            value = 256 * bytes[0] + bytes[1] - 256 * 256
-        elif len(bytes) == 1:
-            value = bytes[0]
-        else:
+        try:
+            bytes = c.encode('gb2312')
+        except:
             value = 0
+        else:
+            if len(bytes) == 2:
+                value = 256 * bytes[0] + bytes[1] - 256 * 256
+            elif len(bytes) == 1:
+                value = bytes[0]
+            else:
+                value = 0
         # Get pinyin for the character.
         if value == 0:
-            pinyin.append('')
+            pinyin.append('*')
         elif 0 < value < 160:
             pinyin.append(chr(value))
         else:

@@ -84,6 +84,9 @@ class ChineseToPinyinTest(unittest.TestCase):
     def test_gb2312_to_pinyin_empty(self):
         self.assertEqual(utils.text.gb2312_to_pinyin(''), '')
 
+    def test_gb2312_to_pinyin_non_gb2312(self):
+        self.assertEqual(utils.text.gb2312_to_pinyin('周鸿祎'), 'ZhouHong*')
+
     def test_gb2312_to_pinyin(self):
         self.assertEqual(utils.text.gb2312_to_pinyin('Python是一种面向对象、解释型计算机程序设计语言。'),
                          'PythonShiYiZhongMianXiangDuiXiangJieShiXingJiSuanJiChengXuSheJiYuYan')
