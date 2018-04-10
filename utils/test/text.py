@@ -115,3 +115,16 @@ class EditDistanceTest(unittest.TestCase):
         self.assertEqual(utils.text.edit_distance('new year', 'happy'), 7)
         self.assertEqual(utils.text.edit_distance('hello', '你好'), 5)
         self.assertEqual(utils.text.edit_distance('XX有限责任公司', 'XX有限公司'), 2)
+
+
+class SimplifiedTraditionalConverterTest(unittest.TestCase):
+    def test_simplified_to_traditional(self):
+        converter = utils.text.SimplifiedTraditionalConverter()
+        self.assertEqual(converter.convert('梅长苏，琅琊榜首，天下第一大帮江左盟宗主。'), '梅長蘇，琅琊榜首，天下第壹大幫江左盟宗主。')
+        self.assertEqual(converter.convert('乐高公司创办于丹麦，至今已有85年的发展历史，追本溯源，还得从它的金字招牌LEGO说起。'), '樂高公司創辦於丹麥，至今已有85年的發展曆史，追本溯源，還得從它的金字招牌LEGO說起。')
+
+    def test_traditional_to_simplified(self):
+        converter = utils.text.SimplifiedTraditionalConverter()
+        converter.simplified_to_traditional = False
+        self.assertEqual(converter.convert('這次，請和我壹起學習壹個簡單的漢語句子。'), '这次，请和我一起学习一个简单的汉语句子。')
+        self.assertEqual(converter.convert('《變形金剛 第壹代》是歐美類型動漫,于2016-12-29上映。愛奇藝在線觀看《變形金剛 第壹代》全集高清視頻'), '《变形金刚 第一代》是欧美类型动漫,于2016-12-29上映。爱奇艺在线观看《变形金刚 第一代》全集高清视频')
