@@ -93,8 +93,8 @@ def quicksort(datas, compare=lambda x1, x2: 0 if x1 == x2 else (-1 if x1 < x2 el
         # 1. Choose a pivot.
         left, right = stack.pop()
         pivot = left + int(random() * (right - left + 1))
-        # 2. Swap elements to make all elements in the left part are no greater than
-        # the pivot, while all elements in the right part are no less than the pivot.
+        # 2. Swap elements to make all elements in the left part are no greater than the pivot,
+        # as well as all elements in the right part are no less than the pivot.
         i, j, data = left, right, datas[pivot]
         while i < j:
             while j > pivot and compare(datas[j], data) >= 0:
@@ -107,7 +107,7 @@ def quicksort(datas, compare=lambda x1, x2: 0 if x1 == x2 else (-1 if x1 < x2 el
                 datas[pivot], pivot = datas[i], i
         datas[pivot] = data
         # 3. Deal with the left part and the right part separately.
-        if pivot - 1 > left:
+        if left < pivot - 1:
             stack.append((left, pivot - 1))
         if pivot + 1 < right:
             stack.append((pivot + 1, right))
@@ -125,17 +125,17 @@ def merge_sort(datas, compare=lambda x1, x2: 0 if x1 == x2 else (-1 if x1 < x2 e
 
     # 1. Subarrays of length 1 are already sorted.
     temp1, temp2, length = datas, datas[:], len(datas)
-    # 2. Repeatedly merge subarrays untill number of the merged subarrays is 1.
+    # 2. Repeatedly merge subarrays until number of merged subarrays is 1.
     for width in width_generator(length):
         # 2.1 Do merge subarrays.
         for i in range(0, length, width * 2):
             left, pivot, right = i, min(i + width, length), min(i + width * 2, length)
             j, k = left, pivot
-            for pos in range(left, right):
+            for p in range(left, right):
                 if (k >= right) or (j < pivot and compare(temp1[j], temp1[k]) <= 0):
-                    temp2[pos], j = temp1[j], j + 1
+                    temp2[p], j = temp1[j], j + 1
                 else:
-                    temp2[pos], k = temp1[k], k + 1
+                    temp2[p], k = temp1[k], k + 1
         # 2.2 Swap variables instead of simply copy data back.
         temp1, temp2 = temp2, temp1
     # 3. Copy data back.

@@ -1,5 +1,4 @@
 import re
-import logging
 
 
 #
@@ -12,11 +11,7 @@ class KeywordsChecker:
 
     END_OF_KEYWORD = object()
 
-    TRIM_PATTERN = re.compile('[{0}]'.format(''.join(
-            [re.escape(c) for c in
-             ' \t\r\n`~!@#$%^&*()-_=+[{]}\\|;:\'",<.>/?｀～！＃¥％…＊（）－—＝＋［｛］｝、｜；：‘’“”，《。》／？'])))
-
-    def __init__(self, keywords):
+    def __init__(self, keywords, punctuations_to_trim=' \t\r\n`~!@#$%^&*()-_=+[{]}\\|;:\'",<.>/?｀～！＃¥％…＊（）－—＝＋［｛］｝、｜；：‘’“”，《。》／？'):
         """Initialize with keywords.
         """
         self.keywords_trie = dict()
@@ -30,26 +25,27 @@ class KeywordsChecker:
                     current_node = new_node
                 else:
                     current_node = current_node[char]
-            if not current_node[KeywordsChecker.END_OF_KEYWORD]:
-                current_node[KeywordsChecker.END_OF_KEYWORD] = True
-            else:
-                logging.warning('Initializing KeywordsChecker with duplicate keyword: {0}'.format(keyword))
+            current_node[KeywordsChecker.END_OF_KEYWORD] = True
+        if punctuations_to_trim:
+            self.trim_pattern = re.compile('[{0}]'.format(''.join([re.escape(c) for c in punctuations_to_trim])))
+        else:
+            self.trim_pattern = None
 
-    def contains_keywords(self, string, trim_punctuation=False):
+    def contains_keywords(self, string):
         """Return True if the string contains any of the keywords, False otherwise.
         """
-        if trim_punctuation:
-            string = KeywordsChecker.TRIM_PATTERN.sub('', string)
+        if self.trim_pattern:
+            string = self.trim_pattern.sub('', string)
         for position in range(len(string)):
             if self.__calculate_matching_length(string, position, True) > 0:
                 return True
         return False
 
-    def get_contained_keywords(self, string, trim_punctuation=False, maximum_match=False):
+    def get_contained_keywords(self, string, maximum_match=False):
         """Return all contained keywords of the string.
         """
-        if trim_punctuation:
-            string = KeywordsChecker.TRIM_PATTERN.sub('', string)
+        if self.trim_pattern:
+            string = self.trim_pattern.sub('', string)
         contained_keywords, length, position = list(), len(string), 0
         while position < length:
             matching_length = self.__calculate_matching_length(string, position, maximum_match)
@@ -63,17 +59,17 @@ class KeywordsChecker:
     def __calculate_matching_length(self, string, begin, maximum_match):
         """Check if a substring from the begin position matches any of the keywords and return the matching length.
         """
-        matches, matching_length, current_node = False, 0, self.keywords_trie
+        current_node, matching_length = self.keywords_trie, 0
         for position in range(begin, len(string)):
             char = string[position]
             if char not in current_node:
                 break
-            current_node, matching_length = current_node[char], matching_length + 1
+            current_node = current_node[char]
             if current_node[KeywordsChecker.END_OF_KEYWORD]:
-                matches = True
+                matching_length = position - begin + 1
                 if not maximum_match:
                     break
-        return matching_length if matches else 0
+        return matching_length
 
 
 #
