@@ -15,7 +15,7 @@ def _create_month_image(year, month, width, height, font_file_path):
     draw.rectangle((0, 0, width - 1, height - 1), (255, 255, 255))
     font = ImageFont.truetype(font_file_path, int(min(width, height) * 0.5))
     text_size = draw.textsize(str(month), font)
-    draw.text(((width - text_size[0]) // 2, (height - text_size[1]) // 2), str(month), (221, 221, 221), font)
+    draw.text(((width - text_size[0]) // 2, (height - text_size[1]) // 2), str(month), (238, 238, 238), font)
     #
     # Calculate dates
     #
@@ -37,7 +37,8 @@ def _create_month_image(year, month, width, height, font_file_path):
         text_size = draw.textsize(date, font)
         x = width // num_days_a_week * (i % num_days_a_week) + (width // num_days_a_week - text_size[0]) // 2
         y = height // num_rows * (i // num_days_a_week) + (height // num_rows - text_size[1]) // 2
-        draw.text((x, y), date, (51, 51, 51), font)
+        fill = (153, 153, 153) if i // num_days_a_week == 0 else (51, 51, 51)
+        draw.text((x, y), date, fill, font)
     return image
 
 
@@ -58,7 +59,7 @@ def _create_year_image(output_folder, year, font_file_path):
         #
         font = ImageFont.truetype(font_file_path, int(title_height * 0.5))
         text_size = draw.textsize(str(year), font)
-        draw.text(((title_height - text_size[1]) // 2, (title_height - text_size[1]) // 2), str(year), (102, 102, 102), font)
+        draw.text(((title_height - text_size[1]) // 2, (title_height - text_size[1]) // 2), str(year), (153, 153, 153), font)
         #
         # Draw months
         #
@@ -76,7 +77,7 @@ def _create_year_image(output_folder, year, font_file_path):
             month_image.close()
 
 
-def create_calendar_images(output_folder, years, font_file_path):
+def create_year_images(output_folder, years, font_file_path):
     for year in years:
         with _create_year_image(output_folder, year, font_file_path) as year_image:
             year_image.save(os.path.join(output_folder, '{0}.png'.format(year)))

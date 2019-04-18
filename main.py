@@ -1,6 +1,7 @@
 import unittest
 
-from utils.calendar import create_calendar_images
+import config
+from utils.calendar import create_year_images
 
 
 def all():
@@ -8,14 +9,12 @@ def all():
 
 
 def main():
-    action = ['unittest', 'create_calendar_images'][0]
-    if action == 'unittest':
+    if config.main_action == 'unittest':
         unittest.main(defaultTest='all', verbosity=2)
-    elif action == 'create_calendar_images':
-        output_folder = '/output/folder/path'
-        years = range(2019, 2020)
-        font_file_path = '/path/to/font/file'
-        create_calendar_images(output_folder, years, font_file_path)
+    elif config.main_action == 'create_year_images':
+        create_year_images(config.create_year_images_output_folder,
+                           config.create_year_images_years,
+                           config.create_year_images_font_file_path)
     else:
         pass
 
