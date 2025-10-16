@@ -1,5 +1,0 @@
-main_action = ['unittest', 'create_year_images'][0]
-
-create_year_images_output_folder = '/output/folder/path'
-create_year_images_years = range(2019, 2020)
-create_year_images_font_file_path = '/path/to/font/file'
